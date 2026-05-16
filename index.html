@@ -7,9 +7,9 @@
 
 <body>
 
-  <h1>🏠 GoHome1</h1>
+  <h1>🏠 GoHome2</h1>
 
-  <button onclick="loadTrips()">Rentrer chez moi1</button>
+  <button onclick="loadTrips()">Rentrer chez moi</button>
 
   <div id="result"></div>
 
@@ -31,4 +31,25 @@
 
         const data = await response.json();
 
-        let html =
+        let html = "<h2>Prochains départs :</h2>";
+
+        data.departures.slice(0, 5).forEach(dep => {
+          html += `
+            <p>
+              🚆 ${dep.line.name} → ${dep.direction}<br>
+              ⏱ ${new Date(dep.when).toLocaleTimeString()}
+            </p>
+          `;
+        });
+
+        result.innerHTML = html;
+
+      } catch (e) {
+        result.innerHTML = "Erreur API 😢<br>" + e;
+        console.error(e);
+      }
+    }
+  </script>
+
+</body>
+</html>
