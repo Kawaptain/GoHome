@@ -15,13 +15,15 @@
 
   <div id="result" style="margin-top:20px;"></div>
 
-  <script>
+<script>
 async function loadTrips() {
   const result = document.getElementById("result");
   result.innerHTML = "Chargement...";
 
   try {
-    const response = await fetch("https://api.allorigins.win/raw?url=https://v6.db.transport.rest/stops/8768600/departures");
+    const url = "https://v6.db.transport.rest/stops/8768600/departures";
+
+    const response = await fetch("https://corsproxy.io/?" + encodeURIComponent(url));
 
     if (!response.ok) {
       throw new Error("HTTP " + response.status);
