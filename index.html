@@ -16,32 +16,38 @@
   <div id="result" style="margin-top:20px;"></div>
 
   <script>
-    async function loadTrips() {
-      const result = document.getElementById("result");
-      result.innerHTML = "Chargement...";
+async function loadTrips() {
+  const result = document.getElementById("result");
+  result.innerHTML = "Chargement...";
 
-      try {
-        const response = await fetch("https://api.transport.rest/stations/stop-area:OCE:SA:8768600/departures");
-        const data = await response.json();
+  try {
+    const response = await fetch("https://v6.db.transport.rest/stops/8768600/departures");
 
-        let html = "<h2>Prochains départs :</h2>";
-
-        data.departures.slice(0,5).forEach(dep => {
-          html += `
-            <p>
-              🚆 ${dep.line.name} → ${dep.direction}<br>
-              ⏱ ${new Date(dep.when).toLocaleTimeString()}
-            </p>
-          `;
-        });
-
-        result.innerHTML = html;
-
-      } catch (e) {
-        result.innerHTML = "Erreur 😢";
-      }
+    if (!response.ok) {
+      throw new Error("HTTP " + response.status);
     }
-  </script>
+
+    const data = await response.json();
+
+    let html = "<h2>Prochains départs :</h2>";
+
+    data.departures.slice(0,5).forEach(dep => {
+      html += `
+        <p>
+          🚆 ${dep.line.name} → ${dep.direction}<br>
+          ⏱ ${new Date(dep.when).toLocaleTimeString()}
+        </p>
+      `;
+    });
+
+    result.innerHTML = html;
+
+  } catch (e) {
+    result.innerHTML = "Erreur API 😢<br>" + e;
+  }
+}
+</script>
+
 
 </body>
 </html>
